@@ -12,6 +12,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const px2rem = require('postcss-px2rem');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -149,8 +150,12 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+              // @remove-on-eject-begin
+              babelrc: true,
+              presets: [require.resolve('babel-preset-react-app')],
+              // @remove-on-eject-end
               compact: true,
+              plugins: ["transform-decorators-legacy"],
             },
           },
           // The notation here is somewhat confusing.
@@ -202,6 +207,7 @@ module.exports = {
                             ],
                             flexbox: 'no-2009',
                           }),
+                          px2rem({remUnit: 75})
                         ],
                       },
                     },
