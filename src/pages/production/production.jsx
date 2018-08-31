@@ -5,7 +5,7 @@ export default class Production extends Component{
     render() {
         return(
             <div>
-                <PublicHeader title="产品" record/>
+                <PublicHeader title="产品" confirm/>
                 我是Production
             </div>
         )

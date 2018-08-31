@@ -5,7 +5,7 @@ export default class Helpcenter extends Component{
     render() {
         return(
             <div>
-                <PublicHeader title="帮助中心" record/>
+                <PublicHeader title="帮助中心"/>
                 我是Helpcenter
             </div>
         )
