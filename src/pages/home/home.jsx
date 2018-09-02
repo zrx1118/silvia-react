@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {is, fromJS} from 'immutable';
 import {Link} from 'react-router-dom';
+import { connect } from 'react-redux';
 import PublicHeader from '@/components/header/header';
 import PublicAlert from '@/components/alert/alert';
 import TouchableOpacity from '@/components/TouchableOpacity/TouchableOpacity';
@@ -38,6 +39,7 @@ class Home extends Component{
     handleInput = (type, event) => {
         let value = event.target.value;
         console.log(type)
+        console.log(event)
         switch(type) {
             case 'orderSum':
                 value = value.replace(/\D/g, '');
@@ -70,7 +72,7 @@ class Home extends Component{
         this.setState({alertStatus: false, alertTip: ''});
     }
     submitForm = () => {
-        const {orderSum, name, phoneNo} = this.props;
+        const {orderSum, name, phoneNo} = this.props.formData;
         let alertTip = '';
         if (!orderSum.toString().length) {
             alertTip = '请输入订单金额';
@@ -117,7 +119,7 @@ class Home extends Component{
             </div>
             <div className="home-form-item">
                 <span>客户电话：</span>
-                <input type="text" maxlength="13" placeholder="请输入客户电话" value={this.props.formData.phoneNo} onChange={this.handleInput.bind(this, 'phoneNo')}/>
+                <input type="text" maxLength="13" placeholder="请输入客户电话" value={this.props.formData.phoneNo} onChange={this.handleInput.bind(this, 'phoneNo')}/>
             </div>
             </form>
             <div>
@@ -147,4 +149,12 @@ class Home extends Component{
     }
 }
 
-export default Home;
+export default connect(state => ({
+    formData: state.formData,
+    proData: state.proData,
+  }), {
+    saveFormData, 
+    saveImg,
+    clearData,
+    clearSelected,
+  })(Home);
