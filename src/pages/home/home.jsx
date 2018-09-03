@@ -26,11 +26,11 @@ class Home extends Component{
     state = {
         alertStatus: false, // 弹框状态
         alertTip: '', // 弹框内容
+        /**
+         * 定义产品列表
+         */
+        selectedProList: []
     }
-    /**
-     * 定义产品列表
-     */
-    selectedProList = [];
     /**
      * 将表单数据保存至redux，保留状态
      * @param {string} type 数据类型 orderSum||name||phoneNo
@@ -91,12 +91,8 @@ class Home extends Component{
         })
     }
     initData = props => {
-        this.selectedProList = [];
-        props.proData.dataList.forEach(item => {
-            console.log(item)
-        })
+        this.setState({selectedProList: props.proData.dataList.filter(item => item.selectStatus && item.selectNum)})
     }
-    
     shouldComponentUpdate(nextProps, nextState) {
         return !is(fromJS(this.props), fromJS(nextProps)) || !is(fromJS(this.state), fromJS(nextState));
     }
@@ -109,30 +105,32 @@ class Home extends Component{
             <PublicHeader title="首页" record/>
             <p className="common-title">请录入您的信息</p>
             <form className="home-form">
-            <div className="home-form-item">
-                <span>销售金额：</span>
-                <input type="text" placeholder="请输入订单金额" value={this.props.formData.orderSum} onChange={this.handleInput.bind(this, 'orderSum')}/>
-            </div>
-            <div className="home-form-item">
-                <span>客户姓名：</span>
-                <input type="text" placeholder="请输入客户姓名" value={this.props.formData.name} onChange={this.handleInput.bind(this, 'name')}/>
-            </div>
-            <div className="home-form-item">
-                <span>客户电话：</span>
-                <input type="text" maxLength="13" placeholder="请输入客户电话" value={this.props.formData.phoneNo} onChange={this.handleInput.bind(this, 'phoneNo')}/>
-            </div>
+                <div className="home-form-item">
+                    <span>销售金额：</span>
+                    <input type="text" placeholder="请输入订单金额" value={this.props.formData.orderSum} onChange={this.handleInput.bind(this, 'orderSum')}/>
+                </div>
+                <div className="home-form-item">
+                    <span>客户姓名：</span>
+                    <input type="text" placeholder="请输入客户姓名" value={this.props.formData.name} onChange={this.handleInput.bind(this, 'name')}/>
+                </div>
+                <div className="home-form-item">
+                    <span>客户电话：</span>
+                    <input type="text" maxLength="13" placeholder="请输入客户电话" value={this.props.formData.phoneNo} onChange={this.handleInput.bind(this, 'phoneNo')}/>
+                </div>
             </form>
             <div>
-            <p className="common-title">请选择销售产品</p>
-            <Link to="/production" className="common-select-btn">
+                <p className="common-title">请选择销售产品</p>
+                <Link to="/production" className="common-select-btn">
                 {
-                this.selectedProList.length?<ul className="selected-pro-list">
-                    {this.selectedProList.map((item, index) => {
-                    return <li className="selected-pro-item ellipsis" key={index}>{item.product_name}x{item.selectNum}</li>
-                    })}
-                </ul>: '选择产品'
+                    this.state.selectedProList.length?<ul className="selected-pro-list">
+                    {
+                        this.state.selectedProList.map((item, index) => {
+                            return <li className="selected-pro-item ellipsis" key={index}>{item.product_name} * {item.selectNum}</li>
+                        })
+                    }
+                    </ul>:'选择产品'
                 }
-            </Link>
+                </Link>
             </div>
             <div className="upload-img-con">
                 <p className="common-title">请上传发票凭证</p>

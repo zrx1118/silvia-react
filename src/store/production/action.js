@@ -7,7 +7,7 @@ export const getProData = (value) => {
         try{
             let result = await API.getProduction();
             result.map(item => {
-                item.selectStatus = true;
+                item.selectStatus = false;
                 item.selectNum = 0;
                 return item;
             })
